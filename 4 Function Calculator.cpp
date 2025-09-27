@@ -52,7 +52,7 @@ bool runProgram()
 
 	for (int i = 0; i < input.length(); i++) 
 	{
-		if (input[i] == ' ')
+		if (input[i] == ' ' || input[i] == '	')
 		{
 			input = input.substr(0, i - 0) + input.substr(i + 1, input.length() - (i + 1));
 		}
