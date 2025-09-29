@@ -13,7 +13,7 @@ enum ErrorCode
 };
 
 bool runProgram();
-ErrorCode sortInput(std::string input);
+ErrorCode sortInput(const std::string& input);
 ErrorCode pemdas();
 bool isOperator(char oper);
 
@@ -82,7 +82,7 @@ bool runProgram()
 /*
 	Checks validity of input and sorts/adds ints and chars into vectors nums and opers, respectively
 */
-ErrorCode sortInput(std::string input)
+ErrorCode sortInput(const std::string& input)
 {
 	int point{ 0 };
 	int charCount{ 0 };
