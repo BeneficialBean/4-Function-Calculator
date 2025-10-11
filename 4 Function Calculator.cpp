@@ -12,8 +12,8 @@ enum ErrorCode
 	DIVISION_BY_ZERO
 };
 
-bool runProgram();
-ErrorCode sortInput(const std::string& input);
+bool runProgram(double& prevAns);
+ErrorCode sortInput(std::string& input, const double& prevAns);
 ErrorCode pemdas();
 bool isOperator(char oper);
 
@@ -26,9 +26,10 @@ Loops the program
 */
 int main()
 {
+	double prevAns{ 0 };
 	while (true)
 	{
-		runProgram();
+		runProgram(prevAns);
 	}
 	return 0;
 }
@@ -36,7 +37,7 @@ int main()
 /*
 Handles the I/O and input errors
 */
-bool runProgram()
+bool runProgram(double& prevAns)
 {
 	std::string input{};
 	nums.clear();
@@ -58,7 +59,7 @@ bool runProgram()
 		}
 	}
 
-	ErrorCode errorCheck = sortInput(input);
+	ErrorCode errorCheck = sortInput(input, prevAns);
 	if (errorCheck == INVALID_OPERATOR)
 	{
 		std::cout << "	Error: Invalid Operator\n";
@@ -75,6 +76,7 @@ bool runProgram()
 		std::cout << "	Error: Division by Zero\n";
 		return false;
 	}
+	prevAns = nums[0];
 	std::cout << "	Answer: " << nums[0] << "\n";
 	return true;
 }
@@ -82,16 +84,26 @@ bool runProgram()
 /*
 	Checks validity of input and sorts/adds ints and chars into vectors nums and opers, respectively
 */
-ErrorCode sortInput(const std::string& input)
+ErrorCode sortInput(std::string& input, const double& prevAns)
 {
-	int point{ 0 };
 	int charCount{ 0 };
 	int numCount{ 0 };
+	int ansIndex{ -1 };
+	std::string ans = std::to_string(prevAns);
 	for (int i = 0; i < input.length(); i++)
 	{
 		if (!isdigit(input[i]))
 		{
-			if (input[i] == '.' && isdigit(input[i + 1]))
+			if (input[i] == 'a' && input[i + 1] == 'n' && input[i + 2] == 's')
+			{
+				numCount++;
+				ansIndex = i;
+			}
+			else if ((input[i] == 'n' && input[i - 1] == 'a' && input[i + 1] == 's') || (input[i] == 's' && input[i - 2] == 'a' && input[i - 1] == 'n'))
+			{
+				break;
+			}
+			else if (input[i] == '.' && isdigit(input[i + 1]))
 			{
 				numCount++;
 			}
@@ -109,6 +121,11 @@ ErrorCode sortInput(const std::string& input)
 			numCount++;
 		}
 	}
+
+	if (ansIndex > -1)
+	{
+		input = input.substr(0, ansIndex) + ans + input.substr(ansIndex + 3, input.size() - ansIndex + 3);
+	}
 	if (numCount == 0)
 	{
 		return INVALID_INPUT; //no numbers inputted
@@ -118,6 +135,8 @@ ErrorCode sortInput(const std::string& input)
 		nums.push_back(stod(input));
 		return SUCCESS;
 	}
+
+	int point{ 0 };
 	for (int i = 1; i < input.length(); i++)
 	{
 		if (i == 1 && !isdigit(input[i - 1]))
