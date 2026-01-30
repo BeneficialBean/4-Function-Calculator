@@ -9,11 +9,8 @@
 #include <sstream>
 using namespace std;
 
-// #define debug
-
 int main()
 {
-    // int funcReturn;
     double prevAns = 0;
     while(program(prevAns) != -1)
     {
@@ -51,7 +48,6 @@ int program(double& prevAns)
             }
             else if (tmpStr == "ans")
             {
-                // output.push(to_string(prevAns));
                 firstNum = prevAns;
             }
             else if (tmpStr == "q")
@@ -107,25 +103,12 @@ int program(double& prevAns)
         {
             output.push(to_string(tmpNum));
         }
-        // printQueue(output);
-        // printStack(opers);
     }
     while (!opers.empty())
     {
         output.push(opers.top());
         opers.pop();
-        // printQueue(output);
-        // printStack(opers);
     }
-
-#ifdef debug
-
-    printQueue(output);
-    // printStack(opers);
-
-    cout << "parsing output: " << endl << endl;
-
-#endif
 
     //parse through output, reusing tmpStr and tmpNum
     stack<double> numStack;
@@ -175,13 +158,6 @@ int program(double& prevAns)
             numStack.push(tmpNum);
         }
         output.pop();
-
-#ifdef debug
-
-        printStack(numStack);
-        printQueue(output);
-
-#endif
     }
     prevAns = numStack.top();
     cout << "   Answer: " << prevAns << endl;
@@ -198,6 +174,7 @@ bool hasPrecedence(string x, string y) //if x has precedence over y
 	    case '/':
         case '%':
             xVal = 1;
+            break;
         default:
             xVal = 0;
     }
@@ -208,6 +185,7 @@ bool hasPrecedence(string x, string y) //if x has precedence over y
 	    case '/':
         case '%':
             yVal = 1;
+            break;
         default:
             yVal = 0;
     }
@@ -254,18 +232,6 @@ bool strIsDig(string& s)
     }
     return true;
 }
-
-// void printStack(stack<string> s)
-// {
-//     cout << "tack: ";
-//     cout << "top ->";
-//     while (!s.empty())
-//     {
-//         cout << s.top() << " ";
-//         s.pop();
-//     }
-//     cout << endl;
-// }
 
 void printStack(stack<double> s)
 {
